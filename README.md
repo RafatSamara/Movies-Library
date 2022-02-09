@@ -19,3 +19,9 @@
 ## Project Features
 * Show listed Movies
 * Browse Movies details
+
+* What observations or questions do you have about what you’ve learned so far?
+- everything here is new
+
+* How long did it take you to complete this assignment? And, before you started, how long did you think it would take you to complete this assignment?
+- around 50 mnts
