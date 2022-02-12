@@ -42,6 +42,46 @@ function getMoviesHandler (req, res){
 
 // //
 
+// For Task 14 //
+
+app.get("/getMovie/id", getMovieHandler);
+app.put("/UPDATE/id", UPDATEMovieHandler);
+app.delete("/DELETE/id", DELETEMovieHandler);
+
+function getMovieHandler(req, res) {
+    const movie_id = req.param.id;
+    const queryString = `SELECT * FROM Movie WHERE id = ${movie_id}`;
+    client.query(queryString).then((data) => {
+        res.status(200).json(data.rows);
+      }).catch((err) => {
+        errorHandler(err, req, res);
+      });
+  }
+
+  function UPDATEMovieHandler(req, res) {
+    const movie_id = req.param.id, movie = req.body;
+    const queryString = `UPDATE Movie SET title = $1, poster_path = $2, overview = $3 WHERE id = ${movie_id} RETURNING;`;
+    let values = [movie.title, movie.poster_path, movie.overview];
+  
+    client.query(queryString).then((data) => {
+        res.status(200).json(data.rows);
+      }).catch((err) => {
+        errorHandler(err, req, res);
+      });
+  }
+
+  function DELETEMovieHandler(req, res) {
+    const movie_id = req.param.id;
+    const queryString = `DELETE FROM Movie WHERE id = ${movie_id}`;
+    client.query(queryString).then(() => {
+        res.status(200).json(data.rows);
+      }).catch((err) => {
+        errorHandler(err, req, res);
+      });
+  }
+
+//
+
 function Move(title, original_language, original_title, poster_path, video, vote_average, overview, release_date, vote_count, id, adult, backdrop_path, popularity, media_type){
     this.title = title;
     this.original_language = original_language;
