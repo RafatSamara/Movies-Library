@@ -7,10 +7,40 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const dataMove = require("./Movie Data/data.json");
+
 app.get("/", homeHandler);
 app.get("/favorite", favoriteHandler);
 app.get("/trending", trendingHandler);
 app.get("/search", searchHandler);
+
+// For Task 13 //
+const pg = require("pg");
+const bodyParser = require("body-parser");
+const client = new pg.Client("postgres://student:x@localhost:9999/student");
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Add Move Handlet
+app.post("/addMovie", addMovieHandler);
+function addMovieHandler (req, res){
+    const body = req.body;
+    const sql = `INSERT INTO Movie (title, poster_path, overview) VALUES($1, $2, $3) RETURNING * ;`;
+    const values = [movie.title, movie.poster_path, movie.overview];
+    client.query(sql, values).then(()=>{
+        return res.status(200).send("Success")
+    });
+}
+
+// Get Movies Handler
+app.get("/getMovies", getMoviesHandler);
+function getMoviesHandler (req, res){
+    const sql = `select * from Movie`;
+    client.query(sql).then(data=>{
+        return res.status(200).json(data.rows)
+    });
+}
+
+// //
 
 function Move(title, original_language, original_title, poster_path, video, vote_average, overview, release_date, vote_count, id, adult, backdrop_path, popularity, media_type){
     this.title = title;
